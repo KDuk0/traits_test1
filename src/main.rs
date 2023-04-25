@@ -1,4 +1,4 @@
-use std::fmt::{Display, Formatter, Result};
+use std::fmt::{Debug, Display, Formatter, Result};
 
 trait Fruitiness {
     fn is_sweet(&self) -> bool {
@@ -22,6 +22,12 @@ impl Display for Pear {
     }
 }
 
+impl Debug for Pear {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        f.write_str("A debugged pear")
+    }
+}
+
 impl Fruitiness for Lemon {
     fn sweetness(&self) -> f32 {
         0.2
@@ -34,7 +40,15 @@ impl Display for Lemon {
     }
 }
 
-fn print_sweetness(fruit: impl Fruitiness + Display) {
+impl Debug for Lemon {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        f.write_str("A debugged lemon")
+    }
+}
+
+fn print_sweetness<T>(fruit: T) where
+T: Fruitiness + Display + Debug,
+{
     println!("{} is sweet? {}", fruit, fruit.is_sweet());
 }
 
